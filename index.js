@@ -28,6 +28,19 @@ app.use(passport.session());
 require("./routes/authRoutes")(app);
 require("./routes/billingRoutes")(app);
 
+if (process.env.NODE_ENV === "production") {
+  //express will serve up production assest like main.js or main.css files
+
+  app.use(express.static("client/build"));
+
+  // Express will serve up index.htm,l file if it does not recognize the route
+
+  const path = require("path");
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
 // [1] test route handler
 //app.get("/", (req, res) => {
 //  res.send({ hi: "there" });
